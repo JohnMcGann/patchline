@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10233f" />
+  <title>OLMC Patch Dialer</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>OLMC Patch Dialer</h1>
+      <p>Select a hospital or line, confirm the number tree, then tap dial.</p>
+    </div>
+    <button id="installBtn" hidden>Install</button>
+  </header>
+
+  <main>
+    <div class="tabs" role="tablist" aria-label="List type">
+      <button class="tab" role="tab" data-tab="hospital" aria-selected="true">Hospitals</button>
+      <button class="tab" role="tab" data-tab="service" aria-selected="false">Services</button>
+    </div>
+
+    <section class="card controls">
+      <label for="search">Search</label>
+      <input id="search" type="search" placeholder="e.g. Foothills, Red Deer, Lethbridge" autocomplete="off" />
+
+      <label for="zone">Zone</label>
+      <select id="zone">
+        <option value="all">All zones</option>
+      </select>
+    </section>
+
+    <section id="results" class="results" aria-live="polite"></section>
+  </main>
+
+  <dialog id="dialDialog">
+    <form method="dialog" class="modal">
+      <button class="close" value="cancel" aria-label="Close">×</button>
+      <h2 id="modalTitle"></h2>
+      <div id="tree" class="tree"></div>
+      <p class="small">This uses dial pauses after the main number. If your phone/carrier does not handle pauses reliably, dial the main number and follow the tree manually.</p>
+      <div class="buttons">
+        <a id="manualDial" class="button secondary" href="#">Dial main line</a>
+        <a id="autoDial" class="button primary" href="#">Dial with tree</a>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
