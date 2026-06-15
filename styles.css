@@ -48,3 +48,12 @@ dialog::backdrop { background: rgba(0,0,0,.45); }
 #installBtn { padding: 9px 12px; background: white; color: var(--brand); }
 .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
 @media (min-width: 680px) { .buttons { grid-template-columns: 1fr 1fr; } }
+
+.meta .alt { background: #fff4e5; color: #8a4b00; padding: 4px 8px; border-radius: 999px; }
+#altRoutes { border: 1px solid var(--line); border-radius: 14px; padding: 6px 12px 12px; margin-bottom: 12px; }
+.alt-head { font-weight: 700; font-size: .9rem; margin: 10px 0 8px; }
+.alt-route { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); }
+.alt-route:first-of-type { border-top: 0; }
+.alt-route span { font-size: .92rem; color: var(--text); }
+.button.small { padding: 8px 14px; font-size: .9rem; background: var(--accent); color: white; }
+#zoneWrap[hidden] { display: none; }

@@ -28,10 +28,12 @@
       <label for="search">Search</label>
       <input id="search" type="search" placeholder="e.g. Foothills, Red Deer, Lethbridge" autocomplete="off" />
 
-      <label for="zone">Zone</label>
-      <select id="zone">
-        <option value="all">All zones</option>
-      </select>
+      <div id="zoneWrap">
+        <label for="zone">Zone</label>
+        <select id="zone">
+          <option value="all">All zones</option>
+        </select>
+      </div>
     </section>
 
     <section id="results" class="results" aria-live="polite"></section>
@@ -42,6 +44,7 @@
       <button class="close" value="cancel" aria-label="Close">×</button>
       <h2 id="modalTitle"></h2>
       <div id="tree" class="tree"></div>
+      <div id="altRoutes" hidden></div>
       <p class="small">This uses dial pauses after the main number. If your phone/carrier does not handle pauses reliably, dial the main number and follow the tree manually.</p>
       <div class="buttons">
         <a id="manualDial" class="button secondary" href="#">Dial main line</a>
