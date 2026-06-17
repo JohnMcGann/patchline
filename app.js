@@ -1,4 +1,4 @@
-const PAUSE = ',,,'; // ~6s of dial pauses before each menu digit; add/remove commas to tune timing
+const WAIT = ';'; // 'wait' char: the phone holds each digit until you tap send, so you control the timing
 
 const LINES = {
   south: { number: '+18442001888', name: 'South Central and Calgary OLMC & ER Patch Line', region: 'South Central / Calgary' },
@@ -171,7 +171,7 @@ function refreshDistricts() {
 
 function telFor(route) {
   if (!route.path.length) return `tel:${route.number}`;
-  return `tel:${route.number}${PAUSE}${route.path.join(PAUSE)}`;
+  return `tel:${route.number}${WAIT}${route.path.join(WAIT)}`;
 }
 
 function render() {
@@ -243,7 +243,7 @@ function openDial(entry) {
     .map(([left, right]) => `<div class="step"><strong>${left}</strong><span>${right}</span></div>`).join('');
   manualDial.href = `tel:${primary.number}`;
   autoDial.href = telFor(primary);
-  autoDial.textContent = primary.path.length ? `Dial ${primary.path.join(' → ')}` : 'Dial now';
+  autoDial.textContent = primary.path.length ? `Dial + send ${primary.path.join(' → ')}` : 'Dial now';
 
   if (entry.routes.length > 1) {
     const alts = entry.routes.slice(1).map(r => `
