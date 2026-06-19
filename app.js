@@ -63,24 +63,24 @@ const menu = [
     ['Sherwood Park', 'Edmonton'], ['East Edmonton UCC', 'Edmonton'], ['Stoney Plain', 'Edmonton'],
   ]},
   { line: 'north', digit: '4', group: 'Hwy 35 North Hospitals', items: [
-    ['High level', 'North', 'District 2'], ['Fort Vermilion', 'North', 'District 2'], ['La Crête', 'North', 'District 2'], ['Manning', 'North', 'District 2'], ['Grimshaw', 'North', 'District 2'],
+    ['High level', 'North', 'District 1'], ['Fort Vermilion', 'North', 'District 1'], ['La Crête', 'North', 'District 1'], ['Manning', 'North', 'District 2'], ['Grimshaw', 'North', 'District 1'],
   ]},
   { line: 'north', digit: '5', group: 'Hwy 2 Hospitals', items: [
-    ['Wabasca', 'North', 'District 6'], ['Slave lake', 'North', 'District 6'], ['High Prairie', 'North', 'District 6'], ['McLennan', 'North', 'District 2'],
-    ['Peace river', 'North', 'District 2'], ['Fair View', 'North', 'District 2'], ['Spirt River', 'North', 'District 2'], ['Grande Prairie', 'North', 'District 9'], ['Beaver Lodge', 'North', 'District 9'],
+    ['Wabasca', 'North', 'District 6'], ['Slave lake', 'North', 'District 6'], ['High Prairie', 'North', 'District 6'], ['McLennan', 'North', 'District 6'],
+    ['Peace river', 'North', 'District 2'], ['Fair View', 'North', 'District 2'], ['Spirt River', 'North', 'District 3'], ['Grande Prairie', 'North', 'District 9'], ['Beaver Lodge', 'North', 'District 3'],
   ]},
   { line: 'north', digit: '6', group: 'Hwy 16 Hospitals', items: [
-    ['Drayton Valley', 'North', 'District 5'], ['Westlock', 'North', 'District 5'], ['Barrhead', 'North', 'District 5'], ['Edson', 'North', 'District 4'],
+    ['Drayton Valley', 'North', 'District 4'], ['Westlock', 'North', 'District 5'], ['Barrhead', 'North', 'District 5'], ['Edson', 'North', 'District 4'],
     ['Hinton', 'North', 'District 4'], ['Jasper', 'North', 'District 4'], ['Grande Cache', 'North', 'District 3'],
   ]},
   { line: 'north', digit: '7', group: 'Hwy 43 Hospitals', items: [
-    ['Mayerthorpe', 'North', 'District 5'], ['Swan Hills', 'North', 'District 5'], ['White Court', 'North', 'District 5'], ['Fox Creek', 'North', 'District 3'], ['Valley View', 'North', 'District 9'],
+    ['Mayerthorpe', 'North', 'District 4'], ['Swan Hills', 'North', 'District 5'], ['White Court', 'North', 'District 4'], ['Fox Creek', 'North', 'District 3'], ['Valley View', 'North', 'District 3'],
   ]},
   { line: 'north', digit: '8', group: 'Hwy 63 Hospitals', items: [
     ['Fort McMurray', 'North', 'District 10'], ['Lac la Biche', 'North', 'District 7'], ['Boyle', 'North', 'District 7'], ['Athabasca', 'North', 'District 7'], ['Red water', 'North', 'District 5'],
   ]},
   { line: 'north', digit: '9', group: 'Hwy 28 Hospitals', items: [
-    ['Cold Lake', 'North', 'District 8'], ['Bonnyville', 'North', 'District 8'], ['Elk Point', 'North', 'District 8'], ['St. Paul', 'North', 'District 8'], ['Smokey Lake', 'North', 'District 8'],
+    ['Cold Lake', 'North', 'District 8'], ['Bonnyville', 'North', 'District 8'], ['Elk Point', 'North', 'District 8'], ['St. Paul', 'North', 'District 8'], ['Smokey Lake', 'North', 'District 7'],
   ]},
 ];
 
