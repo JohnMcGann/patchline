@@ -288,3 +288,31 @@ installBtn.addEventListener('click', async () => {
   deferredPrompt = null;
   installBtn.hidden = true;
 });
+
+const APP_URL = 'https://patchline.responsecore.ca/';
+const shareBtn = document.querySelector('#shareBtn');
+const shareDialog = document.querySelector('#shareDialog');
+const copyBtn = document.querySelector('#copyBtn');
+const shareLinkBtn = document.querySelector('#shareLinkBtn');
+
+shareBtn.addEventListener('click', () => shareDialog.showModal());
+
+shareLinkBtn.addEventListener('click', async () => {
+  if (navigator.share) {
+    try { await navigator.share({ title: 'OLMC Patch Line', text: 'OLMC Patch Line dialer', url: APP_URL }); } catch (e) {}
+  } else {
+    copyLink();
+  }
+});
+
+copyBtn.addEventListener('click', copyLink);
+
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText(APP_URL);
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => { copyBtn.textContent = 'Copy link'; }, 1500);
+  } catch (e) {
+    window.prompt('Copy this link:', APP_URL);
+  }
+}

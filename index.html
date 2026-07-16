@@ -15,7 +15,10 @@
       <h1>OLMC Patch Line</h1>
       <p>Select a hospital or line, confirm the number tree, then tap dial.</p>
     </div>
-    <button id="installBtn" hidden>Install</button>
+    <div class="header-actions">
+      <button id="shareBtn" type="button">Share</button>
+      <button id="installBtn" type="button" hidden>Install</button>
+    </div>
   </header>
 
   <main>
@@ -57,6 +60,21 @@
         <a id="manualDial" class="button secondary" href="#">Dial main line</a>
         <a id="autoDial" class="button primary" href="#">Dial + send digits</a>
       </div>
+    </form>
+  </dialog>
+
+  <dialog id="shareDialog">
+    <form method="dialog" class="modal">
+      <button class="close" value="cancel" aria-label="Close">×</button>
+      <h2>Share this app</h2>
+      <img id="shareQr" class="qr" src="olmc-patch-qr.png" alt="QR code to open OLMC Patch Line" width="220" height="220" />
+      <p class="small">Scan the code, or share the link:</p>
+      <p class="urlbox"><a id="shareUrl" href="https://patchline.responsecore.ca/">patchline.responsecore.ca</a></p>
+      <div class="buttons">
+        <button id="copyBtn" type="button" class="button secondary">Copy link</button>
+        <button id="shareLinkBtn" type="button" class="button primary">Share…</button>
+      </div>
+      <p class="small">To install: open the link on a phone, then use your browser’s <strong>Add to Home Screen</strong>.</p>
     </form>
   </dialog>
 
