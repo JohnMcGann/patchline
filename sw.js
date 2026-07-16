@@ -1,4 +1,4 @@
-const CACHE_NAME = 'olmc-patch-dialer-v12';
+const CACHE_NAME = 'olmc-patch-dialer-v13';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png', './olmc-patch-qr.png'];
 
 self.addEventListener('install', event => {

@@ -316,3 +316,8 @@ async function copyLink() {
     window.prompt('Copy this link:', APP_URL);
   }
 }
+
+// Anonymous install tally via Vercel Web Analytics (no-op if analytics not loaded)
+window.addEventListener('appinstalled', () => {
+  window.va && window.va('event', { name: 'pwa_installed' });
+});
