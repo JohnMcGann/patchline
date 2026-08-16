@@ -6,12 +6,16 @@ const LINES = {
 };
 
 const ZONES = ['Calgary', 'Central South', 'Edmonton', 'North'];
-// Zones that have a further District sub-filter. North map to be added later.
-const DISTRICT_ZONES = ['Central South', 'North'];
+// Zones with a second-level sub-filter (Districts, or Areas for Calgary).
+const DISTRICT_ZONES = ['Calgary', 'Central South', 'North'];
+const AREA_ORDER = ['Metro', 'Suburban', 'Urgent Care Centres'];
 
 // Correct/tidy display names; original spelling is kept as a search alias automatically.
 const NAME_FIX = {
   'PLC': 'Peter Lougheed Centre (PLC)',
+  'Foothills': 'Foothills Medical Centre (FMC)',
+  'Rockyview': 'Rockyview General Hospital (RGH)',
+  'Sheldon Chumir': 'Sheldon Chumir (SCC)',
   'Med Hat': 'Medicine Hat',
   'Fort MacLeod': 'Fort Macleod',
   'Royal Alexander': 'Royal Alexandra',
@@ -29,17 +33,17 @@ const NAME_FIX = {
 // Hospital menu. Item: [name, zone, district?]. Districts apply to Central South and North.
 const menu = [
   { line: 'south', digit: '3', group: 'Calgary Metro Hospitals', items: [
-    ['Foothills', 'Calgary'], ["Children's Hospital", 'Calgary'], ['South Health Campus', 'Calgary'],
-    ['Rockyview', 'Calgary'], ['PLC', 'Calgary'], ['Sheldon Chumir', 'Calgary'], ['South Calgary UCC', 'Calgary'],
+    ['Foothills', 'Calgary', ['Metro']], ["Children's Hospital", 'Calgary', ['Metro']], ['South Health Campus', 'Calgary', ['Metro']],
+    ['Rockyview', 'Calgary', ['Metro']], ['PLC', 'Calgary', ['Metro']], ['Sheldon Chumir', 'Calgary', ['Metro', 'Urgent Care Centres']], ['South Calgary UCC', 'Calgary', ['Metro', 'Urgent Care Centres']],
   ]},
   { line: 'south', digit: '4', group: 'Hwy 2 North Hospitals', items: [
     ['Ponoka', 'Central South', 'District 2'], ['Lacombe', 'Central South', 'District 2'], ['Red Deer', 'Central South', 'District 2'],
     ['Innisfail', 'Central South', 'District 2'], ['Olds', 'Central South', 'District 2'], ['Rocky Mountain House', 'Central South', 'District 2'],
-    ['Sundre', 'Central South', 'District 2'], ['Didsbury', 'Calgary'], ['Airdrie Urgent Care', 'Calgary'],
+    ['Sundre', 'Central South', 'District 2'], ['Didsbury', 'Calgary', ['Suburban']], ['Airdrie Urgent Care', 'Calgary', ['Suburban', 'Urgent Care Centres']],
   ]},
   { line: 'south', digit: '5', group: 'Hwy 2 South Hospitals', items: [
-    ['Okotoks', 'Calgary'], ['Black Diamond', 'Calgary'], ['High River', 'Calgary'], ['Vulcan', 'Calgary'],
-    ['Claresholm', 'Calgary'], ['Fort Macleod', 'Central South', 'District 5'], ['Cardston', 'Central South', 'District 5'],
+    ['Okotoks', 'Calgary', ['Suburban']], ['Black Diamond', 'Calgary', ['Suburban']], ['High River', 'Calgary', ['Suburban']], ['Vulcan', 'Calgary', ['Suburban']],
+    ['Claresholm', 'Calgary', ['Suburban']], ['Fort Macleod', 'Central South', 'District 5'], ['Cardston', 'Central South', 'District 5'],
   ]},
   { line: 'south', digit: '6', group: 'Hwy 4 Hospitals', items: [
     ['Lethbridge', 'Central South', 'District 5'], ['Raymond', 'Central South', 'District 5'], ['Milk River', 'Central South', 'District 5'],
@@ -50,7 +54,7 @@ const menu = [
   ]},
   { line: 'south', digit: '8', group: 'Hwy 1 Hospitals', items: [
     ['Medicine Hat', 'Central South', 'District 4'], ['Brooks', 'Central South', 'District 3'], ['Bassano', 'Central South', 'District 3'],
-    ['Strathmore', 'Central South', 'District 3'], ['Cochrane', 'Calgary'], ['Canmore', 'Calgary'], ['Banff', 'Calgary'],
+    ['Strathmore', 'Central South', 'District 3'], ['Cochrane', 'Calgary', ['Suburban']], ['Canmore', 'Calgary', ['Suburban']], ['Banff', 'Calgary', ['Suburban']],
   ]},
   { line: 'south', digit: '9', group: 'Hwy 3 Hospitals', items: [
     ['Med Hat', 'Central South', 'District 4'], ['Bow Island', 'Central South', 'District 4'], ['Taber', 'Central South', 'District 4'],
@@ -105,10 +109,11 @@ function buildHospitals() {
     g.items.forEach((item, index) => {
       const raw = item[0];
       const zone = item[1];
-      const district = item[2] || '';
+      const raw3 = item[2];
+      const districts = Array.isArray(raw3) ? raw3 : (raw3 ? [raw3] : []);
       const name = canonical(raw);
       const key = normalize(name);
-      if (!map.has(key)) map.set(key, { name, zone, district, type: 'hospital', aliasSet: new Set(), routes: [] });
+      if (!map.has(key)) map.set(key, { name, zone, districts, type: 'hospital', aliasSet: new Set(), routes: [] });
       const entry = map.get(key);
       if (tidy(raw) !== name) entry.aliasSet.add(raw);
       entry.routes.push({
@@ -119,7 +124,7 @@ function buildHospitals() {
       });
     });
   }
-  return [...map.values()].map(e => ({ name: e.name, zone: e.zone, district: e.district, type: e.type, aliases: [...e.aliasSet], routes: e.routes }));
+  return [...map.values()].map(e => ({ name: e.name, zone: e.zone, districts: e.districts, type: e.type, aliases: [...e.aliasSet], routes: e.routes }));
 }
 
 function buildServices() {
@@ -127,7 +132,7 @@ function buildServices() {
     const number = s.number || LINES[s.line].number;
     const region = s.line ? LINES[s.line].region : 'All zones';
     return {
-      name: s.name, zone: region, district: '', type: 'service', aliases: s.aliases || [],
+      name: s.name, zone: region, districts: [], type: 'service', aliases: s.aliases || [],
       routes: [{ number, lineName: s.line ? LINES[s.line].name : s.name, group: 'Direct line', path: s.path }],
     };
   });
@@ -163,9 +168,15 @@ function refreshDistricts() {
   const hasDistricts = activeTab === 'hospital' && DISTRICT_ZONES.includes(z);
   districtWrap.hidden = !hasDistricts;
   if (!hasDistricts) { districtSelect.value = 'all'; return; }
-  const present = [...new Set(entries.filter(e => e.type === 'hospital' && e.zone === z && e.district).map(e => e.district))].sort((a, b) => (parseInt(a.replace(/\D/g, ''), 10) || 0) - (parseInt(b.replace(/\D/g, ''), 10) || 0));
+  const isArea = z === 'Calgary';
+  const label = districtWrap.querySelector('label');
+  if (label) label.textContent = isArea ? 'Area' : 'District';
+  let present = [...new Set(entries.filter(e => e.type === 'hospital' && e.zone === z).flatMap(e => e.districts))];
+  present = isArea
+    ? AREA_ORDER.filter(a => present.includes(a))
+    : present.sort((a, b) => (parseInt(a.replace(/\D/g, ''), 10) || 0) - (parseInt(b.replace(/\D/g, ''), 10) || 0));
   const current = districtSelect.value;
-  districtSelect.innerHTML = '<option value="all">All districts</option>' + present.map(d => `<option value="${d}">${d}</option>`).join('');
+  districtSelect.innerHTML = `<option value="all">${isArea ? 'All areas' : 'All districts'}</option>` + present.map(d => `<option value="${d}">${d}</option>`).join('');
   districtSelect.value = present.includes(current) ? current : 'all';
 }
 
@@ -181,8 +192,8 @@ function render() {
     .filter(entry => {
       if (entry.type !== activeTab) return false;
       const zoneOk = activeTab !== 'hospital' || selectedZone === 'all' || entry.zone === selectedZone;
-      const districtOk = districtWrap.hidden || districtSelect.value === 'all' || entry.district === districtSelect.value;
-      const text = normalize(`${entry.name} ${entry.zone} ${entry.district} ${entry.routes.map(r => r.group).join(' ')} ${entry.aliases.join(' ')}`);
+      const districtOk = districtWrap.hidden || districtSelect.value === 'all' || entry.districts.includes(districtSelect.value);
+      const text = normalize(`${entry.name} ${entry.zone} ${entry.districts.join(' ')} ${entry.routes.map(r => r.group).join(' ')} ${entry.aliases.join(' ')}`);
       return zoneOk && districtOk && (!q || text.includes(q));
     })
     .sort((a, b) => a.name.localeCompare(b.name) || a.zone.localeCompare(b.zone));
@@ -202,7 +213,7 @@ function render() {
       <h3>${entry.name}</h3>
       <div class="meta">
         <span class="badge">${entry.zone}</span>
-        ${entry.district ? `<span class="badge zone2">${entry.district}</span>` : ''}
+        ${entry.districts.map(d => `<span class="badge zone2">${d}</span>`).join('')}
         <span>${primary.group}</span>
         ${primary.path.length ? `<span>Press ${primary.path.join(' → ')}</span>` : '<span>Direct dial</span>'}
         ${extra > 0 ? `<span class="alt">+${extra} other route${extra > 1 ? 's' : ''}</span>` : ''}
